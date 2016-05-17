@@ -296,6 +296,8 @@ void allLightsOff(){
     lightsOff(pixelE2);
 }
 
+// -------------
+
 void switchToPlayer2(boolean stone){
   flag = stone;
   if(flag==false){

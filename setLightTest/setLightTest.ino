@@ -31,7 +31,7 @@ Adafruit_NeoPixel pixels;
 
 CapacitiveSensor   grebA1 = CapacitiveSensor(4,29);
 CapacitiveSensor   grebB1 = CapacitiveSensor(4,2);
-CapacitiveSensor   grebC1 = CapacitiveSensor(4,22);
+// CapacitiveSensor   grebC1 = CapacitiveSensor(4,22);
 CapacitiveSensor   grebD1 = CapacitiveSensor(4,24);
 CapacitiveSensor   grebE1 = CapacitiveSensor(4,32);
 
@@ -81,25 +81,79 @@ void setup()
 
 void loop(){
   
-    Ai = grebA1.capacitiveSensor(50);
-    Bi = grebB1.capacitiveSensor(50);
-    Ci = grebC1.capacitiveSensor(50);
-    Di = grebD1.capacitiveSensor(50);
-    Ei = grebE1.capacitiveSensor(50);
+    Ai = grebA1.capacitiveSensor(1);
+    Bi = grebB1.capacitiveSensor(1);
+//    Ci = grebC1.capacitiveSensor(50);
+    Di = grebD1.capacitiveSensor(1);
+    Ei = grebE1.capacitiveSensor(1);
 
-    Aii = grebA2.capacitiveSensor(50);
-    Bii = grebB2.capacitiveSensor(50);
-    Cii = grebC2.capacitiveSensor(50);
-    Dii = grebD2.capacitiveSensor(50);
-    Eii = grebE2.capacitiveSensor(50);
+    Aii = grebA2.capacitiveSensor(1);
+    Bii = grebB2.capacitiveSensor(1);
+    Cii = grebC2.capacitiveSensor(1);
+    Dii = grebD2.capacitiveSensor(1);
+    Eii = grebE2.capacitiveSensor(1);
 
+    Serial.print("\n A1: "); Serial.print(Ai); 
+    Serial.print("\n B1: "); Serial.print(Bi); 
+//    Serial.print("\n C1: "); Serial.print(Ci); 
+    Serial.print("\n D1: "); Serial.print(Di); 
     Serial.print("\n E1: "); Serial.print(Ei);
+
+    Serial.print("\n A2: "); Serial.print(Aii); 
+    Serial.print("\n B2: "); Serial.print(Bii); 
+    Serial.print("\n C2: "); Serial.print(Cii); 
+    Serial.print("\n D2: "); Serial.print(Dii); 
+    Serial.print("\n E2: "); Serial.print(Eii);
+
+    if(touch(Ai)){
+      setLight(pixelA1);
+      Serial.print("\n A1 touched"); 
+    }
+
+    if(touch(Bi)){
+      setLight(pixelB1);
+      Serial.print("\n B1 touched"); 
+    }
+
+    if(touch(Ci)){
+      setLight(pixelC1);
+      Serial.print("\n C1 touched"); 
+    }
+    
+    if(touch(Di)){
+      setLight(pixelD1);
+      Serial.print("\n D1 touched"); 
+    }
 
     if(touch(Ei)){
       setLight(pixelE1);
+      Serial.print("\n E1 touched"); 
     }
-    else{
-      lightsOff(pixelE1);
+
+    
+    if(touch(Aii)){
+      setLight(pixelA2);
+      Serial.print("\n A2 touched"); 
+    }
+
+    if(touch(Bii)){
+      setLight(pixelB2);
+      Serial.print("\n B2 touched"); 
+    }
+
+    if(touch(Cii)){
+      setLight(pixelC2);
+      Serial.print("\n C2 touched"); 
+    }
+    
+    if(touch(Dii)){
+      setLight(pixelD2);
+      Serial.print("\n D2 touched"); 
+    }
+
+    if(touch(Eii)){
+      setLight(pixelE2);
+      Serial.print("\n E2 touched"); 
     }
 }
 

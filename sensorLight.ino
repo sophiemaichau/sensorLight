@@ -2,21 +2,21 @@
 #include <Adafruit_NeoPixel.h>
 #include "StopWatch.h"
 
-#define pinPortA1 2
-#define pinPortB1 11
+#define pinPortA1 10
+#define pinPortB1 13
 #define pinPortC1 12
-#define pinPortD1 13
-#define pinPortE1 6
+#define pinPortD1 11
+#define pinPortE1 9
 
 #define pinPortA2 7
-#define pinPortB2 8
-#define pinPortC2 9
-#define pinPortD2 10
-#define pinPortE2 11
+#define pinPortB2 3
+#define pinPortC2 5
+#define pinPortD2 6
+#define pinPortE2 8
 
 CapacitiveSensor   grebA1 = CapacitiveSensor(4,29);
-CapacitiveSensor   grebB1 = CapacitiveSensor(4,5);
-CapacitiveSensor   grebC1 = CapacitiveSensor(4,3);
+CapacitiveSensor   grebB1 = CapacitiveSensor(4,2);
+CapacitiveSensor   grebC1 = CapacitiveSensor(4,22);
 CapacitiveSensor   grebD1 = CapacitiveSensor(4,24);
 CapacitiveSensor   grebE1 = CapacitiveSensor(4,32);
 
@@ -34,11 +34,11 @@ Adafruit_NeoPixel pixelC1 = Adafruit_NeoPixel(numPixels, pinPortC1, NEO_GRB + NE
 Adafruit_NeoPixel pixelD1 = Adafruit_NeoPixel(2, pinPortD1, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixelE1 = Adafruit_NeoPixel(numPixels, pinPortE1, NEO_GRB + NEO_KHZ800);
 
-Adafruit_NeoPixel pixelA2 = Adafruit_NeoPixel(numPixels, pinPortA1, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel pixelB2 = Adafruit_NeoPixel(numPixels, pinPortB1, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel pixelC2 = Adafruit_NeoPixel(numPixels, pinPortC1, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel pixelD2 = Adafruit_NeoPixel(numPixels, pinPortD1, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel pixelE2 = Adafruit_NeoPixel(numPixels, pinPortE1, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixelA2 = Adafruit_NeoPixel(numPixels, pinPortA2, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixelB2 = Adafruit_NeoPixel(numPixels, pinPortB2, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixelC2 = Adafruit_NeoPixel(numPixels, pinPortC2, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixelD2 = Adafruit_NeoPixel(numPixels, pinPortD2, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixelE2 = Adafruit_NeoPixel(numPixels, pinPortE2, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixels;
 
 int light = 255;
@@ -59,7 +59,6 @@ StopWatch OffWall;
 
 int count = 0;
 int jumpDist = 3000;
-int reading, lastReading;
 
 boolean flagA1 = false;
 boolean flagB1 = false;
@@ -76,6 +75,7 @@ boolean flag;
 
 int timeOnWall = 0;
 int finalCount = 0;
+
 long inAir;
 boolean turn = true;
 
@@ -92,11 +92,24 @@ void setup()
    pixelC2.begin();
    pixelD2.begin();
    pixelE2.begin();
+
+   pixelA1.show();
+   pixelB1.show();
+   pixelC1.show();
+   pixelD1.show();
+   pixelE1.show();
+   pixelA2.show();
+   pixelB2.show();
+   pixelC2.show();
+   pixelD2.show();
+   pixelE2.show();
 }
 
 
-void loop()                    
-{
+void loop(){
+    
+    inAir = OffWall.elapsed();
+  
     Ai = grebA1.capacitiveSensor(50);
     Bi = grebB1.capacitiveSensor(50);
     Ci = grebC1.capacitiveSensor(50);
@@ -109,39 +122,58 @@ void loop()
     Dii = grebD2.capacitiveSensor(50);
     Eii = grebE2.capacitiveSensor(50);
 
-    inAir = OffWall.elapsed();
+    Serial.print("\n A1: "); Serial.print(Ai); 
+    Serial.print("\n B1: "); Serial.print(Bi); 
+    Serial.print("\n C1: "); Serial.print(Ci); 
+    Serial.print("\n D1: "); Serial.print(Di); 
+    Serial.print("\n E1: "); Serial.print(Ei);
 
-// ------------ player 1 ----------------------
+    // ------------ player 1 ----------------------
 
 if(turn==true){
   
     if(touch(Ai)){
       setLight(pixelA1);
-      switchToPlayer2(flagA1);
+      if(flagA1==false){
+        switchToPlayer2();
+        flagA1=true;
+      }
       Serial.print("\n A1 touched"); 
     }
 
     if(touch(Bi)){
       setLight(pixelB1);
-      switchToPlayer2(flagB1);
+      if(flagB1==false){
+        switchToPlayer2();
+        flagB1=true;
+      }
       Serial.print("\n B1 touched"); 
     }
 
     if(touch(Ci)){
       setLight(pixelC1);
-      switchToPlayer2(flagC1);
+      if(flagC1==false){
+        switchToPlayer2();
+        flagC1=true;
+      }
       Serial.print("\n C1 touched"); 
     }
 
     if(touch(Di)){
       setLight(pixelD1);
-      switchToPlayer2(flagD1);
+      if(flagD1==false){
+        switchToPlayer2();
+        flagD1=true;
+      }
       Serial.print("\n D1 touched"); 
     }
 
     if(touch(Ei)){
       setLight(pixelE1);
-      switchToPlayer2(flagE1);
+      if(flagE1==false){
+        switchToPlayer2();
+        flagE1=true;
+      }
       Serial.print("\n E1 touched"); 
     }
 }
@@ -151,31 +183,46 @@ if(turn==true){
 if(turn==false){
     if(touch(Aii)){
       setLight(pixelA2);
-      switchToPlayer1(flagA2);
+      if(flagA2==false){
+        switchToPlayer1();
+        flagA2=true;
+      }
       Serial.print("\n A2 touched"); 
     }
 
     if(touch(Bii)){
       setLight(pixelB2);
-      switchToPlayer1(flagB2);
+      if(flagB2==false){
+        switchToPlayer1();
+        flagB2=true;
+      }
       Serial.print("\n B2 touched"); 
     }
 
     if(touch(Cii)){
       setLight(pixelC2);
-      switchToPlayer1(flagC2);
+      if(flagC2==false){
+        switchToPlayer1();
+        flagC2=true;
+      }
       Serial.print("\n C2 touched"); 
     }
 
     if(touch(Dii)){
       setLight(pixelD2);
-      switchToPlayer1(flagD2);
+      if(flagD2==false){
+        switchToPlayer1();
+        flagD2=true;
+      }
       Serial.print("\n D2 touched"); 
     }
 
     if(touch(Eii)){
       setLight(pixelE2);
-      switchToPlayer1(flagD2);
+      if(flagE2==false){
+        switchToPlayer1();
+        flagE2=true;
+      }
       Serial.print("\n E2 touched"); 
     }
 }
@@ -227,8 +274,6 @@ if( ((touch(Ai)==false) && (touch(Bi)==false) && (touch(Ci)==false) && (touch(Di
         count=0;
       }
     }
-    
-    delay(10);
 }
 
 void displayResult(){
@@ -296,26 +341,32 @@ void allLightsOff(){
     lightsOff(pixelE2);
 }
 
+void allLightsOn(){
+    setLight(pixelA1);
+    setLight(pixelB1);
+    setLight(pixelC1);
+    setLight(pixelD1);
+    setLight(pixelE1);
+    
+    setLight(pixelA2);
+    setLight(pixelB2);
+    setLight(pixelC2);
+    setLight(pixelD2);
+    setLight(pixelE2);
+}
+
 // -------------
 
-void switchToPlayer2(boolean stone){
-  flag = stone;
-  if(flag==false){
+void switchToPlayer2(){
         count++;
         MySW.start();
         OffWall.reset();
         turn = false;
-        flag=true;
-  }
 }
 
-void switchToPlayer1(boolean stone){
-  flag = stone;
-  if(flag==false){
+void switchToPlayer1(){
         count++;
         MySW.start();
         OffWall.reset();
         turn = true;
-        flag=true;
-  }
 }

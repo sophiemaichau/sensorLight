@@ -10,7 +10,7 @@
 
 #define pinPortA2 7
 #define pinPortB2 3
-#define pinPortC2 5
+#define pinPortC2 32
 #define pinPortD2 6
 #define pinPortE2 8
 
@@ -23,8 +23,7 @@ Adafruit_NeoPixel pixelD1 = Adafruit_NeoPixel(2, pinPortD1, NEO_GRB + NEO_KHZ800
 Adafruit_NeoPixel pixelE1 = Adafruit_NeoPixel(numPixels, pinPortE1, NEO_GRB + NEO_KHZ800);
 
 Adafruit_NeoPixel pixelA2 = Adafruit_NeoPixel(numPixels, pinPortA2, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel pixelB2 = Adafruit_NeoPixel(numPixels, pinPortB2, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel pixelC2 = Adafruit_NeoPixel(numPixels, pinPortC2, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixelB2 = Adafruit_NeoPixel(numPixels, pinPortB2, NEO_GRB + NEO_KHZ800); Adafruit_NeoPixel pixelC2 = Adafruit_NeoPixel(numPixels, pinPortC2, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixelD2 = Adafruit_NeoPixel(numPixels, pinPortD2, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixelE2 = Adafruit_NeoPixel(numPixels, pinPortE2, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixels;
@@ -33,7 +32,7 @@ CapacitiveSensor   grebA1 = CapacitiveSensor(4,29);
 CapacitiveSensor   grebB1 = CapacitiveSensor(4,2);
 // CapacitiveSensor   grebC1 = CapacitiveSensor(4,22);
 CapacitiveSensor   grebD1 = CapacitiveSensor(4,24);
-CapacitiveSensor   grebE1 = CapacitiveSensor(4,32);
+CapacitiveSensor   grebE1 = CapacitiveSensor(4,5); // 32
 
 CapacitiveSensor   grebA2 = CapacitiveSensor(4,40);
 CapacitiveSensor   grebB2 = CapacitiveSensor(4,53);
@@ -48,6 +47,16 @@ long totalPre1 = 0;
 long totalPre2 = 0;
 int x = 1;
 
+// algoritme, tre globale variable for hvert greb
+long preE1;
+long prepreE1;
+long avrE1;
+boolean resultE1 = false;
+long touchedValueE1;
+
+int count=0;
+
+// sensor value
 // sensor value
 long Ai; long Bi; long Ci; long Di; long Ei;
 long Aii; long Bii; long Cii; long Dii; long Eii;
@@ -76,105 +85,68 @@ void setup()
    pixelC2.show();
    pixelD2.show();
    pixelE2.show();
+
 }
 
 
 void loop(){
-  
-    Ai = grebA1.capacitiveSensor(1);
-    Bi = grebB1.capacitiveSensor(1);
-//    Ci = grebC1.capacitiveSensor(50);
-    Di = grebD1.capacitiveSensor(1);
+
+//    Ai = grebA1.capacitiveSensor(1);
+//    Bi = grebB1.capacitiveSensor(1);
+//    Ci = grebC1.capacitiveSensor(1);
+//    Di = grebD1.capacitiveSensor(1);
     Ei = grebE1.capacitiveSensor(1);
 
-    Aii = grebA2.capacitiveSensor(1);
-    Bii = grebB2.capacitiveSensor(1);
-    Cii = grebC2.capacitiveSensor(1);
-    Dii = grebD2.capacitiveSensor(1);
-    Eii = grebE2.capacitiveSensor(1);
+//    Aii = grebA2.capacitiveSensor(1);
+//    Bii = grebB2.capacitiveSensor(1);
+//    Cii = grebC2.capacitiveSensor(1);
+//    Dii = grebD2.capacitiveSensor(1);
+//    Eii = grebE2.capacitiveSensor(1);
+  
+//  Serial.print("\n E1: "); Serial.print(Ei);
 
-    Serial.print("\n A1: "); Serial.print(Ai); 
-    Serial.print("\n B1: "); Serial.print(Bi); 
-//    Serial.print("\n C1: "); Serial.print(Ci); 
-    Serial.print("\n D1: "); Serial.print(Di); 
-    Serial.print("\n E1: "); Serial.print(Ei);
 
-    Serial.print("\n A2: "); Serial.print(Aii); 
-    Serial.print("\n B2: "); Serial.print(Bii); 
-    Serial.print("\n C2: "); Serial.print(Cii); 
-    Serial.print("\n D2: "); Serial.print(Dii); 
-    Serial.print("\n E2: "); Serial.print(Eii);
 
-    if(touch(Ai)){
-      setLight(pixelA1);
-      Serial.print("\n A1 touched"); 
-    }
-
-    if(touch(Bi)){
-      setLight(pixelB1);
-      Serial.print("\n B1 touched"); 
-    }
-
-    if(touch(Ci)){
-      setLight(pixelC1);
-      Serial.print("\n C1 touched"); 
-    }
-    
-    if(touch(Di)){
-      setLight(pixelD1);
-      Serial.print("\n D1 touched"); 
-    }
-
-    if(touch(Ei)){
-      setLight(pixelE1);
-      Serial.print("\n E1 touched"); 
-    }
-
-    
-    if(touch(Aii)){
-      setLight(pixelA2);
-      Serial.print("\n A2 touched"); 
-    }
-
-    if(touch(Bii)){
-      setLight(pixelB2);
-      Serial.print("\n B2 touched"); 
-    }
-
-    if(touch(Cii)){
-      setLight(pixelC2);
-      Serial.print("\n C2 touched"); 
-    }
-    
-    if(touch(Dii)){
-      setLight(pixelD2);
-      Serial.print("\n D2 touched"); 
-    }
-
-    if(touch(Eii)){
-      setLight(pixelE2);
-      Serial.print("\n E2 touched"); 
-    }
+  if(E1touch()==true){
+    // setLight(pixelE1);
+    Serial.print("\n E1 touched: ");
+    count++;
+   // Serial.print(count);
+  }
+  
 }
 
-// ---------------
+ 
+// --- algoritme til gennemsnit
 
-boolean touch(long total) {
-  boolean result = false;
-  
-  if (total > 250 && (((totalPre2 + totalPre1)/2) * 4) < total ){
-    result = true;
+boolean E1touch(){
+  boolean capFlag = false; 
+
+  if(Ei > 250 && Ei > avrE1*3){
+    resultE1 = true;
+    touchedValueE1 = Ei;
+
+      if(Ei > touchedValueE1/2){
+        resultE1 = true;
+       }
   }
   
-  if ( x == 1 ) {
-    totalPre1 = total;
-    x = 2;
+  if(Ei < touchedValueE1){
+    resultE1 = false;
   }
-  else if ( x == 2  ) {
-    totalPre2 = total;
-    x = 1;
+
+  if(capFlag==false){
+    preE1 = Ei;
+    capFlag=true;
   }
-  return result;
+  if(capFlag==true){
+    prepreE1=Ei;
+    capFlag=false;
+  }
+  
+  avrE1 = (preE1+prepreE1)/2;
+
+  return resultE1;
 }
 
 // ------ lysstyring
@@ -217,7 +189,7 @@ void allLightsOn(){
     
     setLight(pixelA2);
     setLight(pixelB2);
-    setLight(pixelC2);
+//    setLight(pixelC2);
     setLight(pixelD2);
     setLight(pixelE2);
 }

@@ -10,7 +10,7 @@
 
 #define pinPortA2 7
 #define pinPortB2 3
-#define pinPortC2 32
+#define pinPortC2 5
 #define pinPortD2 6
 #define pinPortE2 8
 
@@ -28,17 +28,17 @@ Adafruit_NeoPixel pixelD2 = Adafruit_NeoPixel(numPixels, pinPortD2, NEO_GRB + NE
 Adafruit_NeoPixel pixelE2 = Adafruit_NeoPixel(numPixels, pinPortE2, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixels;
 
-CapacitiveSensor   grebA1 = CapacitiveSensor(4,29);
-CapacitiveSensor   grebB1 = CapacitiveSensor(4,2);
-// CapacitiveSensor   grebC1 = CapacitiveSensor(4,22);
-CapacitiveSensor   grebD1 = CapacitiveSensor(4,24);
-CapacitiveSensor   grebE1 = CapacitiveSensor(4,5); // 32
+CapacitiveSensor   grebA1 = CapacitiveSensor(39,33);
+CapacitiveSensor   grebB1 = CapacitiveSensor(39,22);
+// CapacitiveSensor   grebC1 = CapacitiveSensor(39,27);
+CapacitiveSensor   grebD1 = CapacitiveSensor(39,28);
+CapacitiveSensor   grebE1 = CapacitiveSensor(39,34);
 
-CapacitiveSensor   grebA2 = CapacitiveSensor(4,40);
-CapacitiveSensor   grebB2 = CapacitiveSensor(4,53);
-CapacitiveSensor   grebC2 = CapacitiveSensor(4,48);
-CapacitiveSensor   grebD2 = CapacitiveSensor(4,45);
-CapacitiveSensor   grebE2 = CapacitiveSensor(4,37);
+CapacitiveSensor   grebA2 = CapacitiveSensor(39,51);
+CapacitiveSensor   grebB2 = CapacitiveSensor(39,46);
+CapacitiveSensor   grebC2 = CapacitiveSensor(39,45);
+CapacitiveSensor   grebD2 = CapacitiveSensor(39,40);
+CapacitiveSensor   grebE2 = CapacitiveSensor(39,52);
 
 int light = 255;
 
@@ -95,7 +95,7 @@ void loop(){
 //    Bi = grebB1.capacitiveSensor(1);
 //    Ci = grebC1.capacitiveSensor(1);
 //    Di = grebD1.capacitiveSensor(1);
-    Ei = grebE1.capacitiveSensor(1);
+//    Ei = grebE1.capacitiveSensor(1);
 
 //    Aii = grebA2.capacitiveSensor(1);
 //    Bii = grebB2.capacitiveSensor(1);
@@ -106,16 +106,17 @@ void loop(){
 //  Serial.print("\n E1: "); Serial.print(Ei);
 
 
+//
+//  if(E1touch()==true){
+//    // setLight(pixelE1);
+//    Serial.print("\n E1 touched: ");
+//    count++;
+//   // Serial.print(count);
+//  }
 
-  if(E1touch()==true){
-    // setLight(pixelE1);
-    Serial.print("\n E1 touched: ");
-    count++;
-   // Serial.print(count);
-  }
+allLightsOn();
   
 }
-
  
 // --- algoritme til gennemsnit
 

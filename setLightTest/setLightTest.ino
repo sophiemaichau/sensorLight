@@ -35,9 +35,9 @@ CapacitiveSensor   grebD1 = CapacitiveSensor(39,28);
 CapacitiveSensor   grebE1 = CapacitiveSensor(39,34);
 
 CapacitiveSensor   grebA2 = CapacitiveSensor(39,51);
-CapacitiveSensor   grebB2 = CapacitiveSensor(39,46);
+CapacitiveSensor   grebB2 = CapacitiveSensor(39,40);
 CapacitiveSensor   grebC2 = CapacitiveSensor(39,45);
-CapacitiveSensor   grebD2 = CapacitiveSensor(39,40);
+CapacitiveSensor   grebD2 = CapacitiveSensor(39,46);
 CapacitiveSensor   grebE2 = CapacitiveSensor(39,52);
 
 int light = 255;
@@ -73,6 +73,36 @@ long prepreE1;
 long avrE1;
 boolean resultE1 = false;
 boolean flagE1 = true;
+
+long preA2;
+long prepreA2;
+long avrA2;
+boolean resultA2 = false;
+boolean flagA2 = true;
+
+long preB2;
+long prepreB2;
+long avrB2;
+boolean resultB2 = false;
+boolean flagB2 = true;
+
+long preC2;
+long prepreC2;
+long avrC2;
+boolean resultC2 = false;
+boolean flagC2 = true;
+
+long preD2;
+long prepreD2;
+long avrD2;
+boolean resultD2 = false;
+boolean flagD2 = true;
+
+long preE2;
+long prepreE2;
+long avrE2;
+boolean resultE2 = false;
+boolean flagE2 = true;
 
 // sensor value
 // sensor value
@@ -115,11 +145,11 @@ void loop(){
       Di = grebD1.capacitiveSensor(50);
       Ei = grebE1.capacitiveSensor(50);
 
-    Aii = grebA2.capacitiveSensor(50);
-    Bii = grebB2.capacitiveSensor(50);
-    Cii = grebC2.capacitiveSensor(50);
-    Dii = grebD2.capacitiveSensor(50);
-    Eii = grebE2.capacitiveSensor(50);
+      Aii = grebA2.capacitiveSensor(50);
+      Bii = grebB2.capacitiveSensor(50);
+      Cii = grebC2.capacitiveSensor(50);
+      Dii = grebD2.capacitiveSensor(50);
+      Eii = grebE2.capacitiveSensor(50);
   
 //    Serial.print("\n A1: "); Serial.print(Ai); 
 //    Serial.print("\n B1: "); Serial.print(Bi); 
@@ -127,11 +157,11 @@ void loop(){
 //    Serial.print("\n D1: "); Serial.print(Di); 
 //    Serial.print("\n E1: "); Serial.print(Ei);
 
-//    Serial.print("\n A2: "); Serial.print(Aii); 
+    Serial.print("\n A2: "); Serial.print(Aii); 
 //    Serial.print("\n B2: "); Serial.print(Bii); 
 //    Serial.print("\n C2: "); Serial.print(Cii); 
 //    Serial.print("\n D2: "); Serial.print(Dii); 
-    Serial.print("\n E2: "); Serial.print(Eii);
+//    Serial.print("\n E2: "); Serial.print(Eii);
 
   if(A1touch()){
     if(flagA1){
@@ -170,6 +200,49 @@ void loop(){
       setLight(pixelE1);
       Serial.print("\n E1 touched");
       flagE1=false;
+    }
+  }
+
+// ----
+
+
+  if(A2touch()){
+    if(flagA2){
+    setLight(pixelA2);
+    Serial.print("\n A2 touched");
+    flagA2=false;
+    }
+  }
+
+  if(B2touch()){
+    if(flagB2){
+    setLight(pixelB2);
+    Serial.print("\n B2 touched");
+    flagB2=false;
+    }
+  }
+
+ if(C2touch()){
+    if(flagC2){
+    setLight(pixelC2);
+    Serial.print("\n C2 touched");
+    flagC2=false;
+    }
+  }
+
+ if(D2touch()){
+    if(flagD2){
+    setLight(pixelD2);
+    Serial.print("\n D2 touched");
+    flagD2=false;
+    }
+  }
+
+  if(E2touch()){
+    if(flagE2){
+      setLight(pixelE2);
+      Serial.print("\n E2 touched");
+      flagE2=false;
     }
   }
 
@@ -283,6 +356,115 @@ boolean E1touch(){
   avrE1 = (preE1+prepreE1)/2;
 
   return resultE1;
+}
+
+
+// ---
+
+
+boolean A2touch(){
+  boolean capFlag = false; 
+
+  if(Aii > 250 && Aii > avrA2*6){
+    resultA2 = true;
+  }
+
+  if(capFlag==false){
+    preA2 = Aii;
+    capFlag=true;
+  }
+  if(capFlag==true){
+    prepreA2=Aii;
+    capFlag=false;
+  }
+  
+  avrA2 = (preA2+prepreA2)/2;
+
+  return resultA2;
+}
+
+boolean B2touch(){
+  boolean capFlag = false; 
+
+  if(Bii > 250 && Bii > avrB2*7){
+    resultB2 = true;
+  }
+
+  if(capFlag==false){
+    preB2 = Bii;
+    capFlag=true;
+  }
+  if(capFlag==true){
+    prepreB2=Bii;
+    capFlag=false;
+  }
+  
+  avrB2 = (preB2+prepreB2)/2;
+
+  return resultB2;
+}
+
+boolean C2touch(){
+  boolean capFlag = false; 
+
+  if(Cii > 250 && Cii > avrC2*3){
+    resultC2 = true;
+  }
+
+  if(capFlag==false){
+    preC2 = Cii;
+    capFlag=true;
+  }
+  if(capFlag==true){
+    prepreC2=Cii;
+    capFlag=false;
+  }
+  
+  avrC2 = (preC2+prepreC2)/2;
+
+  return resultC2;
+}
+
+boolean D2touch(){
+  boolean capFlag = false; 
+
+  if(Dii > 250 && Dii > avrD2*3){
+    resultD2 = true;
+  }
+
+  if(capFlag==false){
+    preD2 = Dii;
+    capFlag=true;
+  }
+  if(capFlag==true){
+    prepreD2=Dii;
+    capFlag=false;
+  }
+  
+  avrD2 = (preD2+prepreD2)/2;
+
+  return resultD2;
+}
+
+boolean E2touch(){
+  boolean capFlag = false; 
+
+  if(Eii > 250 && Eii > avrE2*7){
+    resultE2 = true;
+  }
+
+  if(capFlag==false){
+    preE2 = Eii;
+    capFlag=true;
+  }
+  if(capFlag==true){
+    prepreE2=Eii;
+    capFlag=false;
+  }
+  
+  avrE2 = (preE2+prepreE2)/2;
+
+  return resultE2;
 }
 
 // ------ lysstyring

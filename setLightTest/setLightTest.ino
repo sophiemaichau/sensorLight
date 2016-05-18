@@ -9,7 +9,7 @@
 #define pinPortE1 9
 
 #define pinPortA2 7
-#define pinPortB2 3
+#define pinPortB2 4
 #define pinPortC2 5
 #define pinPortD2 6
 #define pinPortE2 8
@@ -30,7 +30,7 @@ Adafruit_NeoPixel pixels;
 
 CapacitiveSensor   grebA1 = CapacitiveSensor(39,33);
 CapacitiveSensor   grebB1 = CapacitiveSensor(39,22);
-// CapacitiveSensor   grebC1 = CapacitiveSensor(39,27);
+CapacitiveSensor   grebC1 = CapacitiveSensor(39,27);
 CapacitiveSensor   grebD1 = CapacitiveSensor(39,28);
 CapacitiveSensor   grebE1 = CapacitiveSensor(39,34);
 
@@ -42,19 +42,37 @@ CapacitiveSensor   grebE2 = CapacitiveSensor(39,52);
 
 int light = 255;
 
-// for the method touch
-long totalPre1 = 0;
-long totalPre2 = 0;
-int x = 1;
-
 // algoritme, tre globale variable for hvert greb
+
+long preA1;
+long prepreA1;
+long avrA1;
+boolean resultA1 = false;
+boolean flagA1 = true;
+
+long preB1;
+long prepreB1;
+long avrB1;
+boolean resultB1 = false;
+boolean flagB1 = true;
+
+long preC1;
+long prepreC1;
+long avrC1;
+boolean resultC1 = false;
+boolean flagC1 = true;
+
+long preD1;
+long prepreD1;
+long avrD1;
+boolean resultD1 = false;
+boolean flagD1 = true;
+
 long preE1;
 long prepreE1;
 long avrE1;
 boolean resultE1 = false;
-long touchedValueE1;
-
-int count=0;
+boolean flagE1 = true;
 
 // sensor value
 // sensor value
@@ -91,49 +109,166 @@ void setup()
 
 void loop(){
 
-//    Ai = grebA1.capacitiveSensor(1);
-//    Bi = grebB1.capacitiveSensor(1);
-//    Ci = grebC1.capacitiveSensor(1);
-//    Di = grebD1.capacitiveSensor(1);
-//    Ei = grebE1.capacitiveSensor(1);
+      Ai = grebA1.capacitiveSensor(50);
+      Bi = grebB1.capacitiveSensor(50);
+      Ci = grebC1.capacitiveSensor(50);
+      Di = grebD1.capacitiveSensor(50);
+      Ei = grebE1.capacitiveSensor(50);
 
-//    Aii = grebA2.capacitiveSensor(1);
-//    Bii = grebB2.capacitiveSensor(1);
-//    Cii = grebC2.capacitiveSensor(1);
-//    Dii = grebD2.capacitiveSensor(1);
-//    Eii = grebE2.capacitiveSensor(1);
+    Aii = grebA2.capacitiveSensor(50);
+    Bii = grebB2.capacitiveSensor(50);
+    Cii = grebC2.capacitiveSensor(50);
+    Dii = grebD2.capacitiveSensor(50);
+    Eii = grebE2.capacitiveSensor(50);
   
-//  Serial.print("\n E1: "); Serial.print(Ei);
+//    Serial.print("\n A1: "); Serial.print(Ai); 
+//    Serial.print("\n B1: "); Serial.print(Bi); 
+//    Serial.print("\n C1: "); Serial.print(Ci); 
+//    Serial.print("\n D1: "); Serial.print(Di); 
+//    Serial.print("\n E1: "); Serial.print(Ei);
+
+//    Serial.print("\n A2: "); Serial.print(Aii); 
+//    Serial.print("\n B2: "); Serial.print(Bii); 
+//    Serial.print("\n C2: "); Serial.print(Cii); 
+//    Serial.print("\n D2: "); Serial.print(Dii); 
+    Serial.print("\n E2: "); Serial.print(Eii);
+
+  if(A1touch()){
+    if(flagA1){
+    setLight(pixelA1);
+    Serial.print("\n A1 touched");
+    flagA1=false;
+    }
+  }
+
+  if(B1touch()){
+    if(flagB1){
+    setLight(pixelB1);
+    Serial.print("\n B1 touched");
+    flagB1=false;
+    }
+  }
+
+ if(C1touch()){
+    if(flagC1){
+    setLight(pixelC1);
+    Serial.print("\n C1 touched");
+    flagC1=false;
+    }
+  }
+
+ if(D1touch()){
+    if(flagD1){
+    setLight(pixelD1);
+    Serial.print("\n D1 touched");
+    flagD1=false;
+    }
+  }
+
+  if(E1touch()){
+    if(flagE1){
+      setLight(pixelE1);
+      Serial.print("\n E1 touched");
+      flagE1=false;
+    }
+  }
 
 
-//
-//  if(E1touch()==true){
-//    // setLight(pixelE1);
-//    Serial.print("\n E1 touched: ");
-//    count++;
-//   // Serial.print(count);
-//  }
+delay(100);
 
-allLightsOn();
-  
 }
  
 // --- algoritme til gennemsnit
+
+boolean A1touch(){
+  boolean capFlag = false; 
+
+  if(Ai > 250 && Ai > avrA1*6){
+    resultA1 = true;
+  }
+
+  if(capFlag==false){
+    preA1 = Ai;
+    capFlag=true;
+  }
+  if(capFlag==true){
+    prepreA1=Ai;
+    capFlag=false;
+  }
+  
+  avrA1 = (preA1+prepreA1)/2;
+
+  return resultA1;
+}
+
+boolean B1touch(){
+  boolean capFlag = false; 
+
+  if(Bi > 250 && Bi > avrB1*3){
+    resultB1 = true;
+  }
+
+  if(capFlag==false){
+    preB1 = Bi;
+    capFlag=true;
+  }
+  if(capFlag==true){
+    prepreB1=Bi;
+    capFlag=false;
+  }
+  
+  avrB1 = (preB1+prepreB1)/2;
+
+  return resultB1;
+}
+
+boolean C1touch(){
+  boolean capFlag = false; 
+
+  if(Ci > 250 && Ci > avrC1*6){
+    resultC1 = true;
+  }
+
+  if(capFlag==false){
+    preC1 = Ci;
+    capFlag=true;
+  }
+  if(capFlag==true){
+    prepreC1=Ci;
+    capFlag=false;
+  }
+  
+  avrC1 = (preC1+prepreC1)/2;
+
+  return resultC1;
+}
+
+boolean D1touch(){
+  boolean capFlag = false; 
+
+  if(Di > 250 && Di > avrD1*3){
+    resultD1 = true;
+  }
+
+  if(capFlag==false){
+    preD1 = Di;
+    capFlag=true;
+  }
+  if(capFlag==true){
+    prepreD1=Di;
+    capFlag=false;
+  }
+  
+  avrD1 = (preD1+prepreD1)/2;
+
+  return resultD1;
+}
 
 boolean E1touch(){
   boolean capFlag = false; 
 
   if(Ei > 250 && Ei > avrE1*3){
     resultE1 = true;
-    touchedValueE1 = Ei;
-
-      if(Ei > touchedValueE1/2){
-        resultE1 = true;
-       }
-  }
-  
-  if(Ei < touchedValueE1){
-    resultE1 = false;
   }
 
   if(capFlag==false){
@@ -156,7 +291,7 @@ void setLight(Adafruit_NeoPixel pixelNumber){
     for(int i=0; i<3; i++){
       pixels.setPixelColor(i, pixels.Color(light,0,light));
       pixels.show();
-      }
+    }
 }
 
 void lightsOff(Adafruit_NeoPixel pixelNumber){

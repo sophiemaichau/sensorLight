@@ -23,7 +23,8 @@ Adafruit_NeoPixel pixelD1 = Adafruit_NeoPixel(2, pinPortD1, NEO_GRB + NEO_KHZ800
 Adafruit_NeoPixel pixelE1 = Adafruit_NeoPixel(numPixels, pinPortE1, NEO_GRB + NEO_KHZ800);
 
 Adafruit_NeoPixel pixelA2 = Adafruit_NeoPixel(numPixels, pinPortA2, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel pixelB2 = Adafruit_NeoPixel(numPixels, pinPortB2, NEO_GRB + NEO_KHZ800); Adafruit_NeoPixel pixelC2 = Adafruit_NeoPixel(numPixels, pinPortC2, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixelB2 = Adafruit_NeoPixel(numPixels, pinPortB2, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixelC2 = Adafruit_NeoPixel(numPixels, pinPortC2, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixelD2 = Adafruit_NeoPixel(numPixels, pinPortD2, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixelE2 = Adafruit_NeoPixel(numPixels, pinPortE2, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixels;
@@ -109,6 +110,8 @@ boolean flagE2 = true;
 long Ai; long Bi; long Ci; long Di; long Ei;
 long Aii; long Bii; long Cii; long Dii; long Eii;
 
+int sensivity = 20;
+
 void setup()                    
 {
    Serial.begin(9600);
@@ -139,67 +142,77 @@ void setup()
 
 void loop(){
 
-      Ai = grebA1.capacitiveSensor(50);
-      Bi = grebB1.capacitiveSensor(50);
-      Ci = grebC1.capacitiveSensor(50);
-      Di = grebD1.capacitiveSensor(50);
-      Ei = grebE1.capacitiveSensor(50);
+      Ai = grebA1.capacitiveSensor(sensivity);
+      Bi = grebB1.capacitiveSensor(sensivity);
+      Ci = grebC1.capacitiveSensor(sensivity);
+      Di = grebD1.capacitiveSensor(sensivity);
+      Ei = grebE1.capacitiveSensor(sensivity);
 
-      Aii = grebA2.capacitiveSensor(50);
-      Bii = grebB2.capacitiveSensor(50);
-      Cii = grebC2.capacitiveSensor(50);
-      Dii = grebD2.capacitiveSensor(50);
-      Eii = grebE2.capacitiveSensor(50);
+      Aii = grebA2.capacitiveSensor(sensivity);
+      Bii = grebB2.capacitiveSensor(sensivity);
+      Cii = grebC2.capacitiveSensor(sensivity);
+      Dii = grebD2.capacitiveSensor(sensivity);
+      Eii = grebE2.capacitiveSensor(sensivity);
   
-//    Serial.print("\n A1: "); Serial.print(Ai); 
-//    Serial.print("\n B1: "); Serial.print(Bi); 
-//    Serial.print("\n C1: "); Serial.print(Ci); 
-//    Serial.print("\n D1: "); Serial.print(Di); 
-//    Serial.print("\n E1: "); Serial.print(Ei);
+    Serial.print("\n A1: "); Serial.print(Ai); 
+    Serial.print("\n B1: "); Serial.print(Bi); 
+    Serial.print("\n C1: "); Serial.print(Ci); 
+    Serial.print("\n D1: "); Serial.print(Di); 
+    Serial.print("\n E1: "); Serial.print(Ei);
 
     Serial.print("\n A2: "); Serial.print(Aii); 
-//    Serial.print("\n B2: "); Serial.print(Bii); 
-//    Serial.print("\n C2: "); Serial.print(Cii); 
-//    Serial.print("\n D2: "); Serial.print(Dii); 
-//    Serial.print("\n E2: "); Serial.print(Eii);
+    Serial.print("\n B2: "); Serial.print(Bii); 
+    Serial.print("\n C2: "); Serial.print(Cii); 
+    Serial.print("\n D2: "); Serial.print(Dii); 
+    Serial.print("\n E2: "); Serial.print(Eii);
 
   if(A1touch()){
     if(flagA1){
     setLight(pixelA1);
+    setLight(pixelA2);
     Serial.print("\n A1 touched");
     flagA1=false;
+    flagA2=false;
     }
   }
 
   if(B1touch()){
     if(flagB1){
     setLight(pixelB1);
+    setLight(pixelB2);
     Serial.print("\n B1 touched");
     flagB1=false;
+    flagB2=false;
     }
   }
 
  if(C1touch()){
     if(flagC1){
     setLight(pixelC1);
+    setLight(pixelC2);
     Serial.print("\n C1 touched");
     flagC1=false;
+    flagC2=false;
     }
   }
 
  if(D1touch()){
     if(flagD1){
     setLight(pixelD1);
+    setLight(pixelD2);
     Serial.print("\n D1 touched");
     flagD1=false;
+    flagD2=false;
     }
   }
 
   if(E1touch()){
     if(flagE1){
       setLight(pixelE1);
+      setLight(pixelE2);
       Serial.print("\n E1 touched");
       flagE1=false;
+      flagE2=false;
     }
   }
 
@@ -209,43 +222,52 @@ void loop(){
   if(A2touch()){
     if(flagA2){
     setLight(pixelA2);
+    setLight(pixelA1);
     Serial.print("\n A2 touched");
     flagA2=false;
+    flagA1=false;
     }
   }
 
   if(B2touch()){
     if(flagB2){
     setLight(pixelB2);
+    setLight(pixelB1);
     Serial.print("\n B2 touched");
     flagB2=false;
+    flagB1=false;
     }
   }
 
  if(C2touch()){
     if(flagC2){
     setLight(pixelC2);
+    setLight(pixelC1);
     Serial.print("\n C2 touched");
     flagC2=false;
+    flagC1=false;
     }
   }
 
  if(D2touch()){
     if(flagD2){
     setLight(pixelD2);
+    setLight(pixelD1);
     Serial.print("\n D2 touched");
     flagD2=false;
+    flagD1=false;
     }
   }
 
   if(E2touch()){
     if(flagE2){
       setLight(pixelE2);
+      setLight(pixelE1);
       Serial.print("\n E2 touched");
       flagE2=false;
+      flagE1=false;
     }
   }
-
 }
  
 // --- algoritme til gennemsnit
@@ -253,7 +275,7 @@ void loop(){
 boolean A1touch(){
   boolean capFlag = false; 
 
-  if(Ai > 250 && Ai > avrA1*6){
+  if(Ai > 250 && Ai > avrA1*5){
     resultA1 = true;
   }
 
@@ -274,7 +296,7 @@ boolean A1touch(){
 boolean B1touch(){
   boolean capFlag = false; 
 
-  if(Bi > 250 && Bi > avrB1*3){
+  if(Bi > 250 && Bi > avrB1*2){
     resultB1 = true;
   }
 
@@ -295,7 +317,7 @@ boolean B1touch(){
 boolean C1touch(){
   boolean capFlag = false; 
 
-  if(Ci > 250 && Ci > avrC1*6){
+  if(Ci > 250 && Ci > avrC1*2){
     resultC1 = true;
   }
 
@@ -306,7 +328,7 @@ boolean C1touch(){
   if(capFlag==true){
     prepreC1=Ci;
     capFlag=false;
-  }
+  }  
   
   avrC1 = (preC1+prepreC1)/2;
 
@@ -316,7 +338,7 @@ boolean C1touch(){
 boolean D1touch(){
   boolean capFlag = false; 
 
-  if(Di > 250 && Di > avrD1*3){
+  if(Di > 250 && Di > avrD1*2){
     resultD1 = true;
   }
 
@@ -362,7 +384,7 @@ boolean E1touch(){
 boolean A2touch(){
   boolean capFlag = false; 
 
-  if(Aii > 250 && Aii > avrA2*6){
+  if(Aii > 250 && Aii > avrA2*5){
     resultA2 = true;
   }
 
@@ -383,14 +405,14 @@ boolean A2touch(){
 boolean B2touch(){
   boolean capFlag = false; 
 
-  if(Bii > 250 && Bii > avrB2*7){
+  if(Bii > 250 && Bii > avrB2*10){
     resultB2 = true;
   }
 
   if(capFlag==false){
     preB2 = Bii;
     capFlag=true;
-  }
+  } 
   if(capFlag==true){
     prepreB2=Bii;
     capFlag=false;
@@ -404,7 +426,7 @@ boolean B2touch(){
 boolean C2touch(){
   boolean capFlag = false; 
 
-  if(Cii > 250 && Cii > avrC2*3){
+  if(Cii > 250 && Cii > avrC2*5){
     resultC2 = true;
   }
 

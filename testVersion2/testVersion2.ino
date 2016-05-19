@@ -109,6 +109,8 @@ boolean flagE2 = true;
 long Ai; long Bi; long Ci; long Di; long Ei;
 long Aii; long Bii; long Cii; long Dii; long Eii;
 
+int sensivity = 20;
+
 void setup()                    
 {
    Serial.begin(9600);
@@ -139,25 +141,25 @@ void setup()
 
 void loop(){
 
-      Ai = grebA1.capacitiveSensor(50);
-      Bi = grebB1.capacitiveSensor(50);
-      Ci = grebC1.capacitiveSensor(50);
-      Di = grebD1.capacitiveSensor(50);
-      Ei = grebE1.capacitiveSensor(50);
+      Ai = grebA1.capacitiveSensor(sensivity);
+      Bi = grebB1.capacitiveSensor(sensivity);
+      Ci = grebC1.capacitiveSensor(sensivity);
+      Di = grebD1.capacitiveSensor(sensivity);
+      Ei = grebE1.capacitiveSensor(sensivity);
 
-      Aii = grebA2.capacitiveSensor(50);
-      Bii = grebB2.capacitiveSensor(50);
-      Cii = grebC2.capacitiveSensor(50);
-      Dii = grebD2.capacitiveSensor(50);
-      Eii = grebE2.capacitiveSensor(50);
+      Aii = grebA2.capacitiveSensor(sensivity);
+      Bii = grebB2.capacitiveSensor(sensivity);
+      Cii = grebC2.capacitiveSensor(sensivity);
+      Dii = grebD2.capacitiveSensor(sensivity);
+      Eii = grebE2.capacitiveSensor(sensivity);
   
 //    Serial.print("\n A1: "); Serial.print(Ai); 
 //    Serial.print("\n B1: "); Serial.print(Bi); 
 //    Serial.print("\n C1: "); Serial.print(Ci); 
 //    Serial.print("\n D1: "); Serial.print(Di); 
 //    Serial.print("\n E1: "); Serial.print(Ei);
-
-    Serial.print("\n A2: "); Serial.print(Aii); 
+//
+//    Serial.print("\n A2: "); Serial.print(Aii); 
 //    Serial.print("\n B2: "); Serial.print(Bii); 
 //    Serial.print("\n C2: "); Serial.print(Cii); 
 //    Serial.print("\n D2: "); Serial.print(Dii); 
@@ -245,7 +247,6 @@ void loop(){
       flagE2=false;
     }
   }
-
 }
  
 // --- algoritme til gennemsnit
@@ -253,7 +254,7 @@ void loop(){
 boolean A1touch(){
   boolean capFlag = false; 
 
-  if(Ai > 250 && Ai > avrA1*6){
+  if(Ai > 250 && Ai > avrA1*4){
     resultA1 = true;
   }
 
@@ -306,7 +307,7 @@ boolean C1touch(){
   if(capFlag==true){
     prepreC1=Ci;
     capFlag=false;
-  }
+  }  
   
   avrC1 = (preC1+prepreC1)/2;
 
@@ -362,7 +363,7 @@ boolean E1touch(){
 boolean A2touch(){
   boolean capFlag = false; 
 
-  if(Aii > 250 && Aii > avrA2*6){
+  if(Aii > 250 && Aii > avrA2*5){
     resultA2 = true;
   }
 

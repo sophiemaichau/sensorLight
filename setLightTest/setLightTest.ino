@@ -110,7 +110,7 @@ boolean flagE2 = true;
 long Ai; long Bi; long Ci; long Di; long Ei;
 long Aii; long Bii; long Cii; long Dii; long Eii;
 
-int sensivity = 20;
+int sensivity = 1;
 
 void setup()                    
 {
@@ -154,19 +154,19 @@ void loop(){
       Dii = grebD2.capacitiveSensor(sensivity);
       Eii = grebE2.capacitiveSensor(sensivity);
   
-    Serial.print("\n A1: "); Serial.print(Ai); 
-    Serial.print("\n B1: "); Serial.print(Bi); 
-    Serial.print("\n C1: "); Serial.print(Ci); 
-    Serial.print("\n D1: "); Serial.print(Di); 
-    Serial.print("\n E1: "); Serial.print(Ei);
-
-    Serial.print("\n A2: "); Serial.print(Aii); 
-    Serial.print("\n B2: "); Serial.print(Bii); 
-    Serial.print("\n C2: "); Serial.print(Cii); 
-    Serial.print("\n D2: "); Serial.print(Dii); 
-    Serial.print("\n E2: "); Serial.print(Eii);
-
-  if(A1touch()){
+//    Serial.print("\n A1: "); Serial.print(Ai); 
+//    Serial.print("\n B1: "); Serial.print(Bi); 
+//   Serial.print("\n C1: "); Serial.print(Ci); 
+//    Serial.print("\n D1: "); Serial.print(Di); 
+//    Serial.print("\n E1: "); Serial.print(Ei);
+//
+//    Serial.print("\n A2: "); Serial.print(Aii); 
+//    Serial.print("\n B2: "); Serial.print(Bii); 
+//    Serial.print("\n C2: "); Serial.print(Cii); 
+//    Serial.print("\n D2: "); Serial.print(Dii); 
+//    Serial.print("\n E2: "); Serial.print(Eii);
+ 
+  if(Ai > 1000){
     if(flagA1){
     setLight(pixelA1);
     setLight(pixelA2);
@@ -176,7 +176,7 @@ void loop(){
     }
   }
 
-  if(B1touch()){
+  if(Bi > 200){
     if(flagB1){
     setLight(pixelB1);
     setLight(pixelB2);
@@ -186,7 +186,7 @@ void loop(){
     }
   }
 
- if(C1touch()){
+ if(Ci > 200){
     if(flagC1){
     setLight(pixelC1);
     setLight(pixelC2);
@@ -196,7 +196,7 @@ void loop(){
     }
   }
 
- if(D1touch()){
+ if(Di > 200){
     if(flagD1){
     setLight(pixelD1);
     setLight(pixelD2);
@@ -206,7 +206,7 @@ void loop(){
     }
   }
 
-  if(E1touch()){
+  if(Ei > 100){
     if(flagE1){
       setLight(pixelE1);
       setLight(pixelE2);
@@ -219,7 +219,7 @@ void loop(){
 // ----
 
 
-  if(A2touch()){
+  if(Aii > 1000){
     if(flagA2){
     setLight(pixelA2);
     setLight(pixelA1);
@@ -229,7 +229,7 @@ void loop(){
     }
   }
 
-  if(B2touch()){
+  if(Bii > 1000){
     if(flagB2){
     setLight(pixelB2);
     setLight(pixelB1);
@@ -239,7 +239,7 @@ void loop(){
     }
   }
 
- if(C2touch()){
+ if(Cii > 120){
     if(flagC2){
     setLight(pixelC2);
     setLight(pixelC1);
@@ -259,7 +259,7 @@ void loop(){
     }
   }
 
-  if(E2touch()){
+  if(Eii > 2000){
     if(flagE2){
       setLight(pixelE2);
       setLight(pixelE1);
@@ -269,13 +269,13 @@ void loop(){
     }
   }
 }
- 
+
 // --- algoritme til gennemsnit
 
 boolean A1touch(){
   boolean capFlag = false; 
 
-  if(Ai > 250 && Ai > avrA1*5){
+  if(Ai > 250 && Ai > avrA1*10){
     resultA1 = true;
   }
 
@@ -317,7 +317,7 @@ boolean B1touch(){
 boolean C1touch(){
   boolean capFlag = false; 
 
-  if(Ci > 250 && Ci > avrC1*2){
+  if(Ci > 250 && Ci > avrC1*5){
     resultC1 = true;
   }
 
@@ -338,7 +338,7 @@ boolean C1touch(){
 boolean D1touch(){
   boolean capFlag = false; 
 
-  if(Di > 250 && Di > avrD1*2){
+  if(Di > 250 && Di > avrD1*5){
     resultD1 = true;
   }
 
@@ -359,7 +359,7 @@ boolean D1touch(){
 boolean E1touch(){
   boolean capFlag = false; 
 
-  if(Ei > 250 && Ei > avrE1*3){
+  if(Ei > 250 && Ei > avrE1*2){
     resultE1 = true;
   }
 
@@ -384,7 +384,7 @@ boolean E1touch(){
 boolean A2touch(){
   boolean capFlag = false; 
 
-  if(Aii > 250 && Aii > avrA2*5){
+  if(Aii > 250 && Aii > avrA2*11){
     resultA2 = true;
   }
 
@@ -405,7 +405,7 @@ boolean A2touch(){
 boolean B2touch(){
   boolean capFlag = false; 
 
-  if(Bii > 250 && Bii > avrB2*10){
+  if(Bii > 250 && Bii > avrB2*18){
     resultB2 = true;
   }
 
@@ -426,7 +426,7 @@ boolean B2touch(){
 boolean C2touch(){
   boolean capFlag = false; 
 
-  if(Cii > 250 && Cii > avrC2*5){
+  if(Cii > 250 && Cii > avrC2*3){
     resultC2 = true;
   }
 
@@ -468,7 +468,7 @@ boolean D2touch(){
 boolean E2touch(){
   boolean capFlag = false; 
 
-  if(Eii > 250 && Eii > avrE2*7){
+  if(Eii > 250 && Eii > avrE2*15){
     resultE2 = true;
   }
 

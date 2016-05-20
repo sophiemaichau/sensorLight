@@ -143,14 +143,14 @@ void setup()
 void loop(){
 
       Ai = grebA1.capacitiveSensor(sensivity);
-      Bi = grebB1.capacitiveSensor(sensivity);
-      Ci = grebC1.capacitiveSensor(sensivity);
-      Di = grebD1.capacitiveSensor(sensivity);
-      Ei = grebE1.capacitiveSensor(sensivity);
+      Bi = grebB1.capacitiveSensor(30);
+      Ci = grebC1.capacitiveSensor(30);
+      Di = grebD1.capacitiveSensor(30);
+      Ei = grebE1.capacitiveSensor(30);
 
-      Aii = grebA2.capacitiveSensor(sensivity);
-      Bii = grebB2.capacitiveSensor(sensivity);
-      Cii = grebC2.capacitiveSensor(sensivity);
+      Aii = grebA2.capacitiveSensor(30);
+      Bii = grebB2.capacitiveSensor(30);
+      Cii = grebC2.capacitiveSensor(30);
       Dii = grebD2.capacitiveSensor(sensivity);
       Eii = grebE2.capacitiveSensor(sensivity);
   
@@ -176,7 +176,7 @@ void loop(){
     }
   }
 
-  if(Bi > 200){
+  if(Bi > 1000){
     if(flagB1){
     setLight(pixelB1);
     setLight(pixelB2);
@@ -186,7 +186,7 @@ void loop(){
     }
   }
 
- if(Ci > 200){
+ if(Ci > 600){
     if(flagC1){
     setLight(pixelC1);
     setLight(pixelC2);
@@ -196,7 +196,7 @@ void loop(){
     }
   }
 
- if(Di > 200){
+ if(Di > 600){
     if(flagD1){
     setLight(pixelD1);
     setLight(pixelD2);
@@ -206,7 +206,7 @@ void loop(){
     }
   }
 
-  if(Ei > 100){
+  if(Ei > 600){
     if(flagE1){
       setLight(pixelE1);
       setLight(pixelE2);
@@ -239,7 +239,7 @@ void loop(){
     }
   }
 
- if(Cii > 120){
+ if(Cii > 1000){
     if(flagC2){
     setLight(pixelC2);
     setLight(pixelC1);
@@ -259,7 +259,7 @@ void loop(){
     }
   }
 
-  if(Eii > 2000){
+  if(Eii > 1500){
     if(flagE2){
       setLight(pixelE2);
       setLight(pixelE1);

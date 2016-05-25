@@ -259,7 +259,7 @@ void loop(){
     }
   }
 
-  if(Eii > 1500){
+  if(Eii > 1000){
     if(flagE2){
       setLight(pixelE2);
       setLight(pixelE1);

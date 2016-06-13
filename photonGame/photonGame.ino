@@ -1,13 +1,14 @@
-// pink og pulserende lys
-
 #include <CapacitiveSensor.h>
 #include <Adafruit_NeoPixel.h>
 #include "StopWatch.h"
+#include <SoftwareSerial.h>
 
-#define pinPortA1 10
+SoftwareSerial ser(10,11);
+
+#define pinPortA1 14
 #define pinPortB1 13
 #define pinPortC1 12
-#define pinPortD1 11
+#define pinPortD1 15
 #define pinPortE1 9
 
 #define pinPortA2 7
@@ -112,7 +113,7 @@ boolean flagE2 = true;
 long Ai; long Bi; long Ci; long Di; long Ei;
 long Aii; long Bii; long Cii; long Dii; long Eii;
 
-int sensivity = 1;
+int sensivity = 5;
 
 // game
 boolean turn = true;
@@ -130,9 +131,40 @@ boolean pulseC2=false;
 boolean pulseD2=false;
 boolean pulseE2=false;
 
+boolean pulseA1again=false;
+boolean pulseB1again=false;
+boolean pulseC1again=false;
+boolean pulseD1again=false;
+boolean pulseE1again=false;
+
+boolean pulseA2again=false;
+boolean pulseB2again=false;
+boolean pulseC2again=false;
+boolean pulseD2again=false;
+boolean pulseE2again=false;
+
+boolean touchedStone=false;
+
+char x;
+
+// flere flag
+boolean flagA1once=false;
+boolean flagB1once=false;
+boolean flagC1once=false;
+boolean flagD1once=false;
+boolean flagE1once=false;
+
+boolean flagA2once=false;
+boolean flagB2once=false;
+boolean flagC2once=false;
+boolean flagD2once=false;
+boolean flagE2once=false;
+
 void setup()                    
 {
    Serial.begin(9600);
+   ser.begin(9600);
+   
    pixelA1.begin();
    pixelB1.begin();
    pixelC1.begin();
@@ -152,18 +184,6 @@ void setup()
 
 void loop(){
 
-      Ai = grebA1.capacitiveSensor(sensivity);
-      Bi = grebB1.capacitiveSensor(sensivity);
-      Ci = grebC1.capacitiveSensor(sensivity);
-      Di = grebD1.capacitiveSensor(sensivity);
-      Ei = grebE1.capacitiveSensor(sensivity);
-
-      Aii = grebA2.capacitiveSensor(sensivity);
-      Bii = grebB2.capacitiveSensor(sensivity);
-      Cii = grebC2.capacitiveSensor(sensivity);
-      Dii = grebD2.capacitiveSensor(sensivity);
-      Eii = grebE2.capacitiveSensor(sensivity);
-
     Serial.print("\n A1: "); Serial.print(Ai); 
     Serial.print("\n B1: "); Serial.print(Bi); 
     Serial.print("\n C1: "); Serial.print(Ci); 
@@ -178,70 +198,123 @@ void loop(){
     Serial.print("\n E2: "); Serial.print(Eii);
     Serial.print("\n ");
 
-delay(400);
- 
+  // printer information ud, sendt fra app
+  x = ser.read();
+  if(ser.available()){
+    if(x=='t'){
+    Serial.write(x);
+    }
+  }
+  
+  if(touchedStone==false){
+    
+    for(int i=0; i<5; i++){
+    // spiller 1 er gul og spiller 2 er tyrkis
+    lightE1(light,light,0);
+    lightE2(0,light,light);
+    lightB1(light,light,0);
+    lightB2(0,light,light);
+    delay(25);
+    }
+
+    for(int i=0; i<5; i++){
+    allLightsOff();
+    delay(25);
+    }
+  }
+   
 
   if(turn==true){
+
+      Ai = grebA1.capacitiveSensor(sensivity);
+      Bi = grebB1.capacitiveSensor(sensivity);
+      Ci = grebC1.capacitiveSensor(sensivity);
+      Di = grebD1.capacitiveSensor(sensivity);
+      Ei = grebE1.capacitiveSensor(sensivity);
+  
     if(Ai > 5000){
       if(flagA1){
-      lightA1(light,0,light);
-      pulseA2=true;
       check1();
+      lightA1(light,light,0);
+      pulseA2=true;
       Serial.print("\n A1 touched");
+      flagA2once=true;
       flagA1=false;
       flagA2=false;
       turn=false;
       count++;
       }
+      if(flagA1once==true){
+        pulseA1=false;
+        pulseA1again=true;
+      }
     }
   
     if(Bi > 1000){
       if(flagB1){
-      lightB1(light,0,light);
-      pulseB2=true;
       check1();
+      lightB1(light,light,0);
+      pulseB2=true;
       Serial.print("\n B1 touched");
+      flagB2once=true;
       flagB1=false;
       flagB2=false;
       turn=false;
       count++;
       }
+      if(flagB1once==true){
+        pulseB1=false;
+        pulseB1again=true;
+      }
     }
   
    if(Ci > 1000){
       if(flagC1){
-      lightC1(light,0,light);
-      pulseC2=true;
       check1();
+      lightC1(light,light,0);
+      pulseC2=true;
       Serial.print("\n C1 touched");
+      flagC2once=true;
       flagC1=false;
       flagC2=false;
       turn=false;
       count++;
       }
+      if(flagC1once==true){
+        pulseC1=false;
+        pulseC1again=true;
+      }
     }
   
    if(Di > 1000){
       if(flagD1){
-      lightD1(light,0,light);
-      pulseD2=true;
       check1();
+      lightD1(light,light,0);
+      pulseD2=true;
       Serial.print("\n D1 touched");
+      flagD2once=true;
       flagD1=false;
       flagD2=false;
       turn=false;
       count++;
       }
+      if(flagD1once==true){
+        pulseD1=false;
+        pulseD1again=true;
+      }
     }
   
     if(Ei*5 > 1000){
       if(flagE1){
-        lightE1(light,0,light);
+        lightE1(light,light,0);
         pulseE2=true;
-        check1();
+        touchedStone=true;
+        lightB1(light,light,0);
+        lightB2(0,light,light);
         Serial.print("\n E1 touched");
         flagE1=false;
         flagE2=false;
+        flagE2once=true;
         turn=false;
         count++;
       }
@@ -251,68 +324,89 @@ delay(400);
 // ----
 
   if(turn==false){
+
+      Aii = grebA2.capacitiveSensor(sensivity);
+      Bii = grebB2.capacitiveSensor(sensivity);
+      Cii = grebC2.capacitiveSensor(sensivity);
+      Dii = grebD2.capacitiveSensor(sensivity);
+      Eii = grebE2.capacitiveSensor(sensivity);
+    
     if(Aii > 1000){
       if(flagA2){
-      lightA2(light,0,light);
-      pulseA1=true;
-      check2();
-      Serial.print("\n A2 touched");
-      flagA2=false;
-      flagA1=false;
-      turn=true;
-      count++;
+        check2();
+        lightA2(0,light,light);
+        pulseA1=true;
+        Serial.print("\n A2 touched");
+        flagA1once=true;
+        flagA2=false;
+        flagA1=false;
+        turn=true;
+        count++;
+      }
+      if(flagA2once==true){
+        pulseA2=false;
+        pulseA2again=true;
       }
     }
   
-    if(Bii > 10000){
+    if(Bii > 7000){
       if(flagB2){
-      lightB2(light,0,light);
-      pulseB1=true;
-      check2();
-      Serial.print("\n B2 touched");
-      flagB2=false;
-      flagB1=false;
-      turn=true;
-      count++;
+        check2();
+        lightB2(0,light,light);
+        pulseB1=true;
+        Serial.print("\n B2 touched");
+        flagB1once=true;
+        flagB2=false;
+        flagB1=false;
+        turn=true;
+        count++;
+      }
+      if(flagB2once==true){
+        pulseB2=false;
+        pulseB2again=true;
       }
     }
   
    if(Cii > 2000){
       if(flagC2){
-      lightC2(light,0,light);
-      pulseC1=true;
-      check2();
-      Serial.print("\n C2 touched");
-      flagC2=false;
-      flagC1=false;
-      turn=true;
-      count++;
+        check2();
+        lightC2(0,light,light);
+        pulseC1=true;
+        Serial.print("\n C2 touched");
+        flagC1once=true;
+        flagC2=false;
+        flagC1=false;
+        turn=true;
+        count++;
+      }
+      if(flagC2once==true){
+        pulseC2=false;
+        pulseC2again=true;
       }
     }
    
    if(Dii > 1000){
       if(flagD2){
-      lightD2(light,0,light);
-      pulseD1=true;
-      check2();
-      Serial.print("\n D2 touched");
-      flagD2=false;
-      flagD1=false;
-      turn=true;
-      count++;
+        check2();
+        lightD2(0,light,light);
+        pulseD1=true;
+        Serial.print("\n D2 touched");
+        flagD1=false;
+        flagD2=false;
+        flagD1once=true;
+        turn=true;
+        count++;
+      }
+      if(flagD2once==true){
+        pulseD2=false;
+        pulseD2again=true;
       }
     }
   
     if(Eii > 2000){
-      if(flagE2){
-        lightE2(light,0,light);
-        pulseE1=true;
-        check2();
-        Serial.print("\n E2 touched");
-        flagE2=false;
-        flagE1=false;
-        turn=true;
-        count++;
+      if(flagE2once==true){
+        pulseE2=false;
+        pulseE2again=true;
       }
     }
   }
@@ -357,7 +451,51 @@ delay(400);
     blinkE2();
   }
 
-  if(count==5){
+  // ------------
+
+   if(pulseA1again==true){
+    blinkA1again();
+  }
+
+  if(pulseB1again==true){
+    blinkB1again();
+  }
+
+  if(pulseC1again==true){
+    blinkC1again();
+  }
+
+  if(pulseD1again==true){
+    blinkD1again();
+  }
+
+  if(pulseE1again==true){
+    blinkE1again();
+  }
+
+
+  if(pulseA2again==true){
+    blinkA2again();
+  }
+
+  if(pulseB2again==true){
+    blinkB2again();
+  }
+
+  if(pulseC2again==true){
+    blinkC2again();
+  }
+
+  if(pulseD2again==true){
+    blinkD2again();
+  }
+
+  if(pulseE2again==true){
+    blinkE2again();
+  }
+
+  // når spillet er klaret
+  if(flagB1==false && flagB2==false){
     for(int i=0; i<10; i++){
       allLightsOn();
       delay(500);
@@ -365,6 +503,8 @@ delay(400);
       delay(500);
     }
     count=0;
+    touchedStone=false;
+    //x='anything';
   }
   
   if(count==0){
@@ -399,56 +539,58 @@ delay(400);
 
 void check1(){
   if(flagA1==false){
-    lightA1(light,0,light);
-    pulseA1=false;
+    pulseA1again=false;
+    lightA1(light,light,0);
   }
 
   if(flagB1==false){
-    lightB1(light,0,light);
-    pulseB1=false;
+    pulseB1again=false;
+    lightB1(light,light,0);
   }
 
   if(flagC1==false){
-    lightC1(light,0,light);
-    pulseC1=false;
+    pulseC1again=false;
+    lightC1(light,light,0);
   }
 
   if(flagD1==false){
-    lightD1(light,0,light);
-    pulseD1=false;
+    pulseD1again=false;
+    lightD1(light,light,0);
   }
 
   if(flagE1==false){
-    lightE1(light,0,light);
-    pulseE1=false;
+    pulseE1again=false;
+    lightE1(light,light,0);
   }  
 }
 
 void check2(){
   if(flagA2==false){
-    lightA2(light,0,light);
-    pulseA2=false;
+    pulseA2again=false;
+    lightA2(0,light,light);
   }
 
   if(flagB2==false){
-    lightB2(light,0,light);
-    pulseB2=false;
+    pulseB2again=false;
+    lightB2(0,light,light);
   }
 
   if(flagC2==false){
-    lightC2(light,0,light);
-    pulseC2=false;
+    pulseC2again=false;
+    lightC2(0,light,light);
   }
 
   if(flagD2==false){
-    lightD2(light,0,light);
-    pulseD2=false;
+    pulseD2again=false;
+    lightD2(0,light,light);
   }
 
   if(flagE2==false){
-    lightE2(light,0,light);
-    pulseE2=false;
-  }  
+    pulseE2again=false;
+    flagE2once=false;
+    lightE2(0,light,light);
+  }
+
 }
 
 // ------ lys
@@ -556,12 +698,12 @@ void blinkA1(){
   lightA1(l,0,l); 
    for(int i=0; i<10; i++){
         l -= 25;
-        lightA1(l,0,l);
+        lightA1(0,l,l);
         delay(12);
       }
    for(int i=0; i<10; i++){
         l += 25;
-        lightA1(l,0,l);
+        lightA1(0,l,l);
         delay(12);
       }
 }
@@ -571,12 +713,12 @@ void blinkB1(){
   lightB1(l,0,l); 
    for(int i=0; i<10; i++){
         l -= 25;
-        lightB1(l,0,l);
+        lightB1(0,l,l);
         delay(12);
       }
    for(int i=0; i<10; i++){
         l += 25;
-        lightB1(l,0,l);
+        lightB1(0,l,l);
         delay(12);
       }
 }
@@ -586,12 +728,12 @@ void blinkC1(){
   lightC1(l,0,l); 
    for(int i=0; i<10; i++){
         l -= 25;
-        lightC1(l,0,l);
+        lightC1(0,l,l);
         delay(12);
       }
    for(int i=0; i<10; i++){
         l += 25;
-        lightC1(l,0,l);
+        lightC1(0,l,l);
         delay(12);
       }
 }
@@ -601,12 +743,12 @@ void blinkD1(){
   lightD1(l,0,l); 
    for(int i=0; i<10; i++){
         l -= 25;
-        lightD1(l,0,l);
+        lightD1(0,l,l);
         delay(12);
       }
    for(int i=0; i<10; i++){
         l += 25;
-        lightD1(l,0,l);
+        lightD1(0,l,l);
         delay(12);
       }
 }
@@ -617,87 +759,244 @@ void blinkE1(){
   lightE1(l,0,l); 
    for(int i=0; i<10; i++){
         l -= 25;
-        lightE1(l,0,l);
+        lightE1(0,l,l);
         delay(12);
       }
    for(int i=0; i<10; i++){
         l += 25;
-        lightE1(l,0,l);
+        lightE1(0,l,l);
         delay(12);
       }
 }
 
 void blinkA2(){
   int l = 255;
-  lightA2(l,0,l); 
+  lightA2(l,l,0); 
    for(int i=0; i<10; i++){
         l -= 25;
-        lightA2(l,0,l);
+        lightA2(l,l,0);
         delay(12);
       }
    for(int i=0; i<10; i++){
         l += 25;
-        lightA2(l,0,l);
+        lightA2(l,l,0);
         delay(12);
       }
 }
 
 void blinkB2(){
   int l = 255;
-  lightB2(l,0,l); 
+  lightB2(l,l,0); 
    for(int i=0; i<10; i++){
         l -= 25;
-        lightB2(l,0,l);
+        lightB2(l,l,0);
         delay(12);
       }
    for(int i=0; i<10; i++){
         l += 25;
-        lightB2(l,0,l);
+        lightB2(l,l,0);
         delay(12);
       }
 }
 
 void blinkC2(){
   int l = 255;
-  lightC2(l,0,l); 
+  lightC2(l,l,0); 
    for(int i=0; i<10; i++){
         l -= 25;
-        lightC2(l,0,l);
+        lightC2(l,l,0);
         delay(12);
       }
    for(int i=0; i<10; i++){
         l += 25;
-        lightC2(l,0,l);
+        lightC2(l,l,0);
         delay(12);
       }
 }
 
 void blinkD2(){
   int l = 255;
-  lightD2(l,0,l); 
+  lightD2(l,l,0); 
    for(int i=0; i<10; i++){
         l -= 25;
-        lightD2(l,0,l);
+        lightD2(l,l,0);
         delay(12);
       }
    for(int i=0; i<10; i++){
         l += 25;
-        lightD2(l,0,l);
+        lightD2(l,l,0);
         delay(12);
       }
 }
 
 void blinkE2(){
   int l = 255;
-  lightE2(l,0,l); 
+  lightE2(l,l,0); 
    for(int i=0; i<10; i++){
         l -= 25;
-        lightE2(l,0,l);
+        lightE2(l,l,0);
         delay(12);
       }
    for(int i=0; i<10; i++){
         l += 25;
-        lightE2(l,0,l);
+        lightE2(l,l,0);
         delay(12);
       }
 }
+
+// -------------------
+
+void blinkA2again(){
+  int l = 255;
+  lightA2(l,0,l); 
+   for(int i=0; i<10; i++){
+        l -= 25;
+        lightA2(0,l,l);
+        delay(12);
+      }
+   for(int i=0; i<10; i++){
+        l += 25;
+        lightA2(0,l,l);
+        delay(12);
+      }
+}
+
+void blinkB2again(){
+  int l = 255;
+  lightB2(l,0,l); 
+   for(int i=0; i<10; i++){
+        l -= 25;
+        lightB2(0,l,l);
+        delay(12);
+      }
+   for(int i=0; i<10; i++){
+        l += 25;
+        lightB2(0,l,l);
+        delay(12);
+      }
+}
+
+void blinkC2again(){
+  int l = 255;
+  lightC2(l,0,l); 
+   for(int i=0; i<10; i++){
+        l -= 25;
+        lightC2(0,l,l);
+        delay(12);
+      }
+   for(int i=0; i<10; i++){
+        l += 25;
+        lightC2(0,l,l);
+        delay(12);
+      }
+}
+
+void blinkD2again(){
+  int l = 255;
+  lightD2(l,0,l); 
+   for(int i=0; i<10; i++){
+        l -= 25;
+        lightD2(0,l,l);
+        delay(12);
+      }
+   for(int i=0; i<10; i++){
+        l += 25;
+        lightD2(0,l,l);
+        delay(12);
+      }
+}
+
+
+void blinkE2again(){
+  int l = 255;
+  lightE2(l,0,l); 
+   for(int i=0; i<10; i++){
+        l -= 25;
+        lightE2(0,l,l);
+        delay(12);
+      }
+   for(int i=0; i<10; i++){
+        l += 25;
+        lightE2(0,l,l);
+        delay(12);
+      }
+}
+
+
+void blinkA1again(){
+  int l = 255;
+  lightA1(l,l,0); 
+   for(int i=0; i<10; i++){
+        l -= 25;
+        lightA1(l,l,0);
+        delay(12);
+      }
+   for(int i=0; i<10; i++){
+        l += 25;
+        lightA1(l,l,0);
+        delay(12);
+      }
+}
+
+void blinkB1again(){
+  int l = 255;
+  lightB1(l,l,0); 
+   for(int i=0; i<10; i++){
+        l -= 25;
+        lightB1(l,l,0);
+        delay(12);
+      }
+   for(int i=0; i<10; i++){
+        l += 25;
+        lightB1(l,l,0);
+        delay(12);
+      }
+}
+
+void blinkC1again(){
+  int l = 255;
+  lightC1(l,l,0); 
+   for(int i=0; i<10; i++){
+        l -= 25;
+        lightC1(l,l,0);
+        delay(12);
+      }
+   for(int i=0; i<10; i++){
+        l += 25;
+        lightC1(l,l,0);
+        delay(12);
+      }
+}
+
+void blinkD1again(){
+  int l = 255;
+  lightD1(l,l,0); 
+   for(int i=0; i<10; i++){
+        l -= 25;
+        lightD1(l,l,0);
+        delay(12);
+      }
+   for(int i=0; i<10; i++){
+        l += 25;
+        lightD1(l,l,0);
+        delay(12);
+      }
+}
+
+void blinkE1again(){
+  int l = 255;
+  lightE1(l,l,0); 
+   for(int i=0; i<10; i++){
+        l -= 25;
+        lightE1(l,l,0);
+        delay(12);
+      }
+   for(int i=0; i<10; i++){
+        l += 25;
+        lightE1(l,l,0);
+        delay(12);
+      }
+}
+
+
+

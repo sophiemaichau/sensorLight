@@ -48,67 +48,18 @@ int light = 255;
 
 // algoritme, tre globale variable for hvert greb
 
-long preA1;
-long prepreA1;
-long avrA1;
-boolean resultA1 = false;
 boolean flagA1 = true;
-
-long preB1;
-long prepreB1;
-long avrB1;
-boolean resultB1 = false;
 boolean flagB1 = true;
-
-long preC1;
-long prepreC1;
-long avrC1;
-boolean resultC1 = false;
 boolean flagC1 = true;
-
-long preD1;
-long prepreD1;
-long avrD1;
-boolean resultD1 = false;
 boolean flagD1 = true;
-
-long preE1;
-long prepreE1;
-long avrE1;
-boolean resultE1 = false;
 boolean flagE1 = true;
 
-long preA2;
-long prepreA2;
-long avrA2;
-boolean resultA2 = false;
 boolean flagA2 = true;
-
-long preB2;
-long prepreB2;
-long avrB2;
-boolean resultB2 = false;
 boolean flagB2 = true;
-
-long preC2;
-long prepreC2;
-long avrC2;
-boolean resultC2 = false;
 boolean flagC2 = true;
-
-long preD2;
-long prepreD2;
-long avrD2;
-boolean resultD2 = false;
 boolean flagD2 = true;
-
-long preE2;
-long prepreE2;
-long avrE2;
-boolean resultE2 = false;
 boolean flagE2 = true;
 
-// sensor value
 // sensor value
 long Ai; long Bi; long Ci; long Di; long Ei;
 long Aii; long Bii; long Cii; long Dii; long Eii;
@@ -169,6 +120,7 @@ void setup()
    pixelB1.begin();
    pixelC1.begin();
    pixelD1.begin();
+
    pixelE1.begin();
    pixelA2.begin();
    pixelB2.begin();
@@ -177,26 +129,24 @@ void setup()
    pixelE2.begin();
 
    allLightsOff();
-
-   
 }
 
 
 void loop(){
 
-    Serial.print("\n A1: "); Serial.print(Ai); 
-    Serial.print("\n B1: "); Serial.print(Bi); 
-    Serial.print("\n C1: "); Serial.print(Ci); 
-    Serial.print("\n D1: "); Serial.print(Di); 
-    Serial.print("\n E1: "); Serial.print(Ei*5);
-    Serial.print("\n ");
-
-    Serial.print("\n A2: "); Serial.print(Aii); 
-    Serial.print("\n B2: "); Serial.print(Bii); 
-    Serial.print("\n C2: "); Serial.print(Cii); 
-    Serial.print("\n D2: "); Serial.print(Dii); 
-    Serial.print("\n E2: "); Serial.print(Eii);
-    Serial.print("\n ");
+//    Serial.print("\n A1: "); Serial.print(Ai); 
+//    Serial.print("\n B1: "); Serial.print(Bi); 
+//    Serial.print("\n C1: "); Serial.print(Ci); 
+//    Serial.print("\n D1: "); Serial.print(Di); 
+//    Serial.print("\n E1: "); Serial.print(Ei*5);
+//    Serial.print("\n ");
+//
+//    Serial.print("\n A2: "); Serial.print(Aii); 
+//    Serial.print("\n B2: "); Serial.print(Bii); 
+//    Serial.print("\n C2: "); Serial.print(Cii); 
+//    Serial.print("\n D2: "); Serial.print(Dii); 
+//    Serial.print("\n E2: "); Serial.print(Eii);
+//    Serial.print("\n ");
 
   // printer information ud, sendt fra app
   x = ser.read();
@@ -258,7 +208,6 @@ void loop(){
       Serial.print("\n B1 touched");
       flagB2once=true;
       flagB1=false;
-      flagB2=false;
       turn=false;
       count++;
       }
@@ -357,7 +306,6 @@ void loop(){
         Serial.print("\n B2 touched");
         flagB1once=true;
         flagB2=false;
-        flagB1=false;
         turn=true;
         count++;
       }
@@ -504,7 +452,6 @@ void loop(){
     }
     count=0;
     touchedStone=false;
-    //x='anything';
   }
   
   if(count==0){
@@ -530,8 +477,34 @@ void loop(){
     pulseC2=false;
     pulseD2=false;
     pulseE2=false;
-    
+
+   flagA1once=false;
+   flagB1once=false;
+   flagC1once=false;
+   flagD1once=false;
+   flagE1once=false;
+  
+   flagA2once=false;
+   flagB2once=false;
+   flagC2once=false;
+   flagD2once=false;
+   flagE2once=false; 
+
+   pulseA1again=false;
+   pulseB1again=false;
+   pulseC1again=false;
+   pulseD1again=false;
+   pulseE1again=false;
+  
+   pulseA2again=false;
+   pulseB2again=false;
+   pulseC2again=false;
+   pulseD2again=false;
+   pulseE2again=false;
+ 
     turn=true;
+
+    touchedStone=false;
   }
 }
 

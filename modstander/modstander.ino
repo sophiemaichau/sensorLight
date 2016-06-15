@@ -89,7 +89,6 @@ int sensivity = 5;
 
 // game
 boolean turn = true;
-int count=0;
 boolean touchedStone=false;
 
 boolean player1won=false;

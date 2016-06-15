@@ -1,6 +1,5 @@
 #include <CapacitiveSensor.h>
 #include <Adafruit_NeoPixel.h>
-#include "StopWatch.h"
 #include <SoftwareSerial.h>
 
 SoftwareSerial ser(10,11);

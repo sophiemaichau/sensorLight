@@ -2,7 +2,9 @@
 #include <Adafruit_NeoPixel.h>
 #include <SoftwareSerial.h>
 
-SoftwareSerial ser(10,11);
+SoftwareSerial ser(10,11); // RX, TX
+
+int game = 0;
 
 #define pinPortA1 14
 #define pinPortB1 13
@@ -45,8 +47,6 @@ CapacitiveSensor   grebE2 = CapacitiveSensor(39,52);
 
 int light = 255;
 
-// algoritme, tre globale variable for hvert greb
-
 boolean flagA1 = true;
 boolean flagB1 = true;
 boolean flagC1 = true;
@@ -67,7 +67,6 @@ int sensivity = 5;
 
 // game
 boolean turn = true;
-int count=0;
 
 boolean pulseA1=false;
 boolean pulseB1=false;
@@ -93,6 +92,21 @@ boolean pulseC2again=false;
 boolean pulseD2again=false;
 boolean pulseE2again=false;
 
+boolean A1touched=false;
+boolean B1touched=false;
+boolean C1touched=false;
+boolean D1touched=false;
+boolean E1touched=false;
+
+boolean A2touched=false;
+boolean B2touched=false;
+boolean C2touched=false;
+boolean D2touched=false;
+boolean E2touched=false;
+
+boolean player1won=false;
+boolean player2won=false;
+
 boolean touchedStone=false;
 
 char x;
@@ -110,8 +124,9 @@ boolean flagC2once=false;
 boolean flagD2once=false;
 boolean flagE2once=false;
 
-void setup()                    
-{
+int count = 0;
+
+void setup() {
    Serial.begin(9600);
    ser.begin(9600);
    
@@ -127,34 +142,34 @@ void setup()
    pixelD2.begin();
    pixelE2.begin();
 
-   allLightsOff();
+   // allLightsOff();
+   allLightsOn();
 }
 
-
-void loop(){
-
-//    Serial.print("\n A1: "); Serial.print(Ai); 
-//    Serial.print("\n B1: "); Serial.print(Bi); 
-//    Serial.print("\n C1: "); Serial.print(Ci); 
-//    Serial.print("\n D1: "); Serial.print(Di); 
-//    Serial.print("\n E1: "); Serial.print(Ei*5);
-//    Serial.print("\n ");
-//
-//    Serial.print("\n A2: "); Serial.print(Aii); 
-//    Serial.print("\n B2: "); Serial.print(Bii); 
-//    Serial.print("\n C2: "); Serial.print(Cii); 
-//    Serial.print("\n D2: "); Serial.print(Dii); 
-//    Serial.print("\n E2: "); Serial.print(Eii);
-//    Serial.print("\n ");
-
-  // printer information ud, sendt fra app
+ 
+void loop() {
   x = ser.read();
-  if(ser.available()){
-    if(x=='t'){
-    Serial.write(x);
-    }
+
+  if(x=='t'){
+    // samarbejdende
+    game = 1;
   }
-  
+  if(x=='o'){
+   // modstander
+    game = 2;
+  }
+
+  switch(game){
+    case 1:
+      function1();
+      break;
+    case 2:
+      function2();
+      break;
+  }
+} 
+
+void function1(){
   if(touchedStone==false){
     
     for(int i=0; i<5; i++){
@@ -169,6 +184,10 @@ void loop(){
     for(int i=0; i<5; i++){
     allLightsOff();
     delay(25);
+    }
+
+    if(turn==false){
+      turn=true;
     }
   }
    
@@ -444,7 +463,8 @@ void loop(){
   // når spillet er klaret
   if(flagB1==false && flagB2==false){
     for(int i=0; i<10; i++){
-      allLightsOn();
+      player1blink();
+      player2blink();
       delay(500);
       allLightsOff();
       delay(500);
@@ -507,6 +527,305 @@ void loop(){
   }
 }
 
+void function2(){
+  if(touchedStone==false){
+    
+    for(int i=0; i<5; i++){
+    // spiller 1 er gul og spiller 2 er tyrkis
+    lightE1(light,light,0);
+    lightE2(0,light,light);
+    lightB1(light,light,0);
+    lightB2(0,light,light);
+    delay(25);
+    }
+
+    for(int i=0; i<5; i++){
+    allLightsOff();
+    delay(25);
+    }
+  }
+   
+
+  if(turn==true){
+
+      Ai = grebA1.capacitiveSensor(sensivity);
+      Bi = grebB1.capacitiveSensor(sensivity);
+      Ci = grebC1.capacitiveSensor(sensivity);
+      Di = grebD1.capacitiveSensor(sensivity);
+      Ei = grebE1.capacitiveSensor(sensivity);
+    
+      if(pulseA1==true){
+        blinkA1again();
+      }
+    
+      if(pulseB1==true){
+        blinkB1again();
+      }
+    
+      if(pulseC1==true){
+        blinkC1again();
+      }
+    
+      if(pulseD1==true){
+        blinkD1again();
+      }
+    
+      if(pulseE1==true){
+        blinkE1again();
+      }
+    
+      if(pulseA2==true){
+        lightA2(0,light,light);
+      }
+    
+      if(pulseB2==true){
+        lightB2(0,light,light);
+      }
+    
+      if(pulseC2==true){
+        lightC2(0,light,light);
+      }
+    
+      if(pulseD2==true){
+        lightD2(0,light,light);
+      }
+    
+      if(pulseE2==true){
+        lightE2(0,light,light);
+      }
+  
+    if(Ai > 5000){
+      if(flagA1 && A1touched==false){
+        pulseA1=true;
+        lightA2(light,0,0);
+        flagA2=false;
+        Serial.print("\n A1 touched");
+        turn=false;
+        A1touched=true;
+      }
+      if(flagA1==false){
+        player2won=true;
+      }
+    }
+  
+    if(Bi > 1000){
+      if(flagB1 && B1touched==false){
+        pulseB1=true;
+        lightB2(light,0,0);
+        flagB2=false;
+        Serial.print("\n B1 touched");
+        turn=false;
+        B1touched=true;
+      }
+      if(flagB1==false){
+        player2won=true;
+      }
+    }
+  
+   if(Ci > 1000){
+      if(flagC1 && C1touched==false){
+        pulseC1=true;
+        lightC2(light,0,0);
+        flagC2=false;
+        Serial.print("\n C1 touched");
+        turn=false;
+        C1touched=true;
+      }
+      if(flagC1==false){
+        player2won=true;
+      }
+    }
+  
+   if(Di > 1000){
+      if(flagD1 && D1touched==false){
+        pulseD1=true;
+        lightD2(light,0,0);
+        flagD2=false;
+        Serial.print("\n D1 touched");
+        turn=false;
+        D1touched=true;
+      }
+      if(flagD1==false){
+        player2won=true;
+      }
+    }
+  
+    if(Ei*5 > 1000){
+      if(flagE1 && E1touched==false){
+        pulseE1=true;
+        pulseE2=true;
+        touchedStone=true;
+        lightB1(light,light,0);
+        lightB2(0,light,light);
+        Serial.print("\n E1 touched");
+        E1touched=true;
+        E2touched=true;
+      }
+    }
+  }
+
+// ----
+
+  if(turn==false){
+
+      if(pulseA1==true){
+        lightA1(light,light,0);
+      }
+    
+      if(pulseB1==true){
+        lightB1(light,light,0);
+      }
+    
+      if(pulseC1==true){
+        lightC1(light,light,0);
+      }
+    
+      if(pulseD1==true){
+        lightD1(light,light,0);
+      }
+    
+      if(pulseE1==true){
+        lightE1(light,light,0);
+      }
+
+      if(pulseA2==true){
+        blinkA2again();
+      }
+    
+      if(pulseB2==true){
+        blinkB2again();
+      }
+    
+      if(pulseC2==true){
+        blinkC2again();
+      }
+    
+      if(pulseD2==true){
+        blinkD2again();
+      }
+    
+      if(pulseE2==true){
+        blinkE2again();
+      }
+
+      Aii = grebA2.capacitiveSensor(sensivity);
+      Bii = grebB2.capacitiveSensor(sensivity);
+      Cii = grebC2.capacitiveSensor(sensivity);
+      Dii = grebD2.capacitiveSensor(sensivity);
+      Eii = grebE2.capacitiveSensor(sensivity);
+    
+    if(Aii > 1000){
+      if(flagA2 && A2touched==false){
+        pulseA2=true;
+        lightA1(light,0,0);
+        flagA1=false;
+        Serial.print("\n A2 touched");
+        turn=true;
+        A2touched=true;
+      }
+      if(flagA2==false){
+        player1won=true;
+      }
+    }
+  
+    if(Bii > 7000){
+      if(flagB2 && B2touched==false){
+        pulseB2=true;
+        lightB1(light,0,0);
+        flagB1=false;
+        Serial.print("\n B2 touched");
+        turn=true;
+        B2touched=true;
+      }
+      if(flagB2==false){
+        player1won=true;
+      }
+    }
+  
+   if(Cii > 2000){
+      if(flagC2 && C2touched==false){
+        pulseC2=true;
+        lightC1(light,0,0);
+        flagC1=false;
+        Serial.print("\n C2 touched");
+        turn=true;
+        C2touched=true;
+      }
+      if(flagC2==false){
+        player1won=true;
+      }
+    }
+   
+   if(Dii > 1000){
+      if(flagD2 && D2touched==false){
+        pulseD2=true;
+        lightD1(light,0,0);
+        flagD1=false;
+        Serial.print("\n D2 touched");
+        turn=true;
+        D2touched=true;
+      }
+      if(flagD2==false){
+        player1won=true;
+      }
+    }
+  
+    if(Eii > 2000){
+      if(flagE2 && E2touched==false){
+        pulseE2=true;
+        pulseE1=true;
+        touchedStone=true;
+        lightB1(light,light,0);
+        lightB2(0,light,light);
+        Serial.print("\n E2 touched");
+        E2touched=true;
+        E1touched=true;
+        
+      }
+    }
+  }
+
+  // når spillet er klaret
+  
+  if(player1won==true){
+    for(int i=0; i<10; i++){
+      player1blink();
+      looserBlink();
+      delay(500);
+      allLightsOff();
+      delay(500);
+    }
+     player1won=false;    
+     reset();
+     turn=false;
+     
+  }
+
+  if(player2won==true){
+    for(int i=0; i<10; i++){
+      player2blink();
+      looserBlink();
+      delay(500);
+      allLightsOff();
+      delay(500);
+    }
+   player2won=false;
+   reset();
+   turn=true;
+  }
+
+  if(B1touched==true){
+    player1won=true;
+  }
+
+  if(B2touched==true){
+    player2won=true;
+  }
+}
+
+
+// ---------------
+
 // check lys
 
 void check1(){
@@ -562,11 +881,9 @@ void check2(){
     flagE2once=false;
     lightE2(0,light,light);
   }
-
 }
 
-// ------ lys
-
+// --
 void lightA1(int r, int g, int b){
      for(int i=0;i<numPixels;i++){
         pixelA1.setPixelColor(i, pixelA1.Color(r,g,b));
@@ -638,16 +955,16 @@ void lightE2(int r, int g, int b){
 }
 
 void allLightsOn(){
-   lightA1(0,light,0);
-   lightB1(0,light,0);
-   lightC1(0,light,0);
-   lightD1(0,light,0);
-   lightE1(0,light,0);
-   lightA2(0,light,0);
-   lightB2(0,light,0);
-   lightC2(0,light,0);
-   lightD2(0,light,0);
-   lightE2(0,light,0);
+   lightA1(0,200,0);
+   lightB1(0,200,0);
+   lightC1(0,200,0);
+   lightD1(0,200,0);
+   lightE1(0,200,0);
+   lightA2(0,200,0);
+   lightB2(0,200,0);
+   lightC2(0,200,0);
+   lightD2(0,200,0);
+   lightE2(0,200,0);
 }
 
 void allLightsOff(){
@@ -667,7 +984,7 @@ void allLightsOff(){
 
 void blinkA1(){
   int l = 255;
-  lightA1(l,0,l); 
+  lightA1(0,l,l); 
    for(int i=0; i<10; i++){
         l -= 25;
         lightA1(0,l,l);
@@ -682,7 +999,7 @@ void blinkA1(){
 
 void blinkB1(){
   int l = 255;
-  lightB1(l,0,l); 
+  lightB1(0,l,l); 
    for(int i=0; i<10; i++){
         l -= 25;
         lightB1(0,l,l);
@@ -697,7 +1014,7 @@ void blinkB1(){
 
 void blinkC1(){
   int l = 255;
-  lightC1(l,0,l); 
+  lightC1(0,l,l); 
    for(int i=0; i<10; i++){
         l -= 25;
         lightC1(0,l,l);
@@ -712,7 +1029,7 @@ void blinkC1(){
 
 void blinkD1(){
   int l = 255;
-  lightD1(l,0,l); 
+  lightD1(0,l,l); 
    for(int i=0; i<10; i++){
         l -= 25;
         lightD1(0,l,l);
@@ -728,7 +1045,7 @@ void blinkD1(){
 
 void blinkE1(){
   int l = 255;
-  lightE1(l,0,l); 
+  lightE1(0,l,l); 
    for(int i=0; i<10; i++){
         l -= 25;
         lightE1(0,l,l);
@@ -820,7 +1137,7 @@ void blinkE2(){
 
 void blinkA2again(){
   int l = 255;
-  lightA2(l,0,l); 
+  lightA2(0,l,l); 
    for(int i=0; i<10; i++){
         l -= 25;
         lightA2(0,l,l);
@@ -835,7 +1152,7 @@ void blinkA2again(){
 
 void blinkB2again(){
   int l = 255;
-  lightB2(l,0,l); 
+  lightB2(0,l,l); 
    for(int i=0; i<10; i++){
         l -= 25;
         lightB2(0,l,l);
@@ -850,7 +1167,7 @@ void blinkB2again(){
 
 void blinkC2again(){
   int l = 255;
-  lightC2(l,0,l); 
+  lightC2(0,l,l); 
    for(int i=0; i<10; i++){
         l -= 25;
         lightC2(0,l,l);
@@ -865,7 +1182,7 @@ void blinkC2again(){
 
 void blinkD2again(){
   int l = 255;
-  lightD2(l,0,l); 
+  lightD2(0,l,l); 
    for(int i=0; i<10; i++){
         l -= 25;
         lightD2(0,l,l);
@@ -881,7 +1198,7 @@ void blinkD2again(){
 
 void blinkE2again(){
   int l = 255;
-  lightE2(l,0,l); 
+  lightE2(0,l,l); 
    for(int i=0; i<10; i++){
         l -= 25;
         lightE2(0,l,l);
@@ -970,5 +1287,65 @@ void blinkE1again(){
       }
 }
 
+void reset(){
+      allLightsOff();
+      flagA1=true;
+      flagB1=true;
+      flagC1=true;
+      flagD1=true;
+      flagE1=true;
+      flagA2=true;
+      flagB2=true;
+      flagC2=true;
+      flagD2=true;
+      flagE2=true;
+     pulseA1=false;
+     pulseB1=false;
+     pulseC1=false;
+     pulseD1=false;
+     pulseE1=false;
+     pulseA2=false;
+     pulseB2=false;
+     pulseC2=false;
+     pulseD2=false;
+     pulseE2=false; 
 
+     A1touched=false;
+     B1touched=false;
+     C1touched=false;
+     D1touched=false;
+     E1touched=false;
+    
+     A2touched=false;
+     B2touched=false;
+     C2touched=false;
+     D2touched=false;
+     E2touched=false;
+     
+     touchedStone=false;
+}
+
+void player1blink(){
+   lightA1(light,light,0);
+   lightB1(light,light,0);
+   lightC1(light,light,0);
+   lightD1(light,light,0);
+   lightE1(light,light,0);
+}
+
+void player2blink(){
+   lightA2(0,light,light);
+   lightB2(0,light,light);
+   lightC2(0,light,light);
+   lightD2(0,light,light);
+   lightE2(0,light,light);
+}
+
+void looserBlink(){
+  lightA2(light,0,0);
+  lightB2(light,0,0);
+  lightC2(light,0,0);
+  lightD2(light,0,0);
+  lightE2(light,0,0);
+}
 
